@@ -13,18 +13,18 @@ if (GradleVersion.current().compareTo(minGradleVersion) < 0) {
 }
 
 include 'core'
-project(':core').name = 'bitcoinj-core'
+project(':core').name = 'btcvj-core'
 
 include 'tools'
-project(':tools').name = 'bitcoinj-tools'
+project(':tools').name = 'btcvj-tools'
 
 include 'examples'
-project(':examples').name = 'bitcoinj-examples'
+project(':examples').name = 'btcvj-examples'
 
 if (GradleVersion.current().compareTo(minFxGradleVersion) >= 0 && JavaVersion.current().isJava11Compatible()) {
     System.err.println "Including wallettemplate because ${GradleVersion.current()} and Java ${JavaVersion.current()}"
     include 'wallettemplate'
-    project(':wallettemplate').name = 'bitcoinj-wallettemplate'
+    project(':wallettemplate').name = 'btcvj-wallettemplate'
 } else {
     System.err.println "Skipping wallettemplate, requires ${minFxGradleVersion}+ and Java 11+, currently running: ${GradleVersion.current()} and Java ${JavaVersion.current()}"
 }

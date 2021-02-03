@@ -24,6 +24,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.Utils;
 import org.bitcoinj.crypto.X509Utils;
+import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.params.UnitTestParams;
 import org.bitcoinj.protocols.payments.PaymentProtocol.Output;
@@ -48,7 +49,10 @@ import static org.junit.Assert.*;
 
 public class PaymentProtocolTest {
     private static final NetworkParameters UNITTEST = UnitTestParams.get();
-    private static final NetworkParameters TESTNET = TestNet3Params.get();
+	private static final NetworkParameters TESTNET = TestNet3Params.get();
+	private static final NetworkParameters MAINNET = MainNetParams.get();
+
+
 
     // static test data
     private static final Coin AMOUNT = Coin.SATOSHI;
@@ -124,6 +128,25 @@ public class PaymentProtocolTest {
         assertEquals(PAYMENT_URL, parsedPaymentRequest.getPaymentUrl());
         assertArrayEquals(MERCHANT_DATA, parsedPaymentRequest.getMerchantData());
     }
+
+	@Test
+	public void testMainPaymentRequest() throws Exception {
+		// Create
+		PaymentRequest paymentRequest = PaymentProtocol.createPaymentRequest(MAINNET, AMOUNT, TO_ADDRESS, MEMO,
+			PAYMENT_URL, MERCHANT_DATA).build();
+		byte[] paymentRequestBytes = paymentRequest.toByteArray();
+
+		// Parse
+		PaymentSession parsedPaymentRequest = PaymentProtocol.parsePaymentRequest(PaymentRequest
+			.parseFrom(paymentRequestBytes));
+		final List<Output> parsedOutputs = parsedPaymentRequest.getOutputs();
+		assertEquals(1, parsedOutputs.size());
+		assertEquals(AMOUNT, parsedOutputs.get(0).amount);
+		assertArrayEquals(ScriptBuilder.createOutputScript(TO_ADDRESS).getProgram(), parsedOutputs.get(0).scriptData);
+		assertEquals(MEMO, parsedPaymentRequest.getMemo());
+		assertEquals(PAYMENT_URL, parsedPaymentRequest.getPaymentUrl());
+		assertArrayEquals(MERCHANT_DATA, parsedPaymentRequest.getMerchantData());
+	}
 
     @Test
     public void testPaymentMessage() throws Exception {
