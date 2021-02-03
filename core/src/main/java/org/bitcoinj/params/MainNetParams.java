@@ -37,9 +37,9 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         targetTimespan = TARGET_TIMESPAN;
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
         dumpedPrivateKeyHeader = 128;
-        addressHeader = 0;
-        p2shHeader = 5;
-        segwitAddressHrp = "bc";
+        addressHeader = 78;
+        p2shHeader = 60;
+        segwitAddressHrp = "royale";
         port = 8333;
         packetMagic = 0xf9beb4d9L;
         bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".
